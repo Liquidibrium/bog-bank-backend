@@ -1,14 +1,14 @@
-package com.example.bogvaluteconverter;
+package ge.bog.currencyconverter;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class BogValuteConverterApplication {
+public class BogCurrencyConverterApplication {
 
     public static void main(String[] args) {
 
-        SpringApplication.run(BogValuteConverterApplication.class, args);
+        SpringApplication.run(BogCurrencyConverterApplication.class, args);
 
     }
 

@@ -1,4 +1,4 @@
-package com.example.bogvaluteconverter;
+package ge.bog.currencyconverter;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
