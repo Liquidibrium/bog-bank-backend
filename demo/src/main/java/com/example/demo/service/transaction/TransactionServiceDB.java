@@ -20,7 +20,7 @@ public class TransactionServiceDB implements TransactionService {
     public Boolean transferMoney(String usernameFrom, String usernameTo, Long amount) {
         boolean valid = // validate if usernameFrom is valid
                 TransactionValidator.validateTransaction(usernameFrom, usernameTo, amount);
-        if (valid){
+        if (valid) {
             // main logic
         }
         return null;

@@ -4,7 +4,6 @@ import com.example.demo.model.UserDto;
 import org.springframework.stereotype.Service;
 
 
-
 @Service
 public interface RegistrationService {
 

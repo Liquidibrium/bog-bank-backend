@@ -17,7 +17,7 @@ public class UserDto {
     private String password;
     private String email;
 
-    public static UserDto entityToDto(UserEntity userEntity){
+    public static UserDto entityToDto(UserEntity userEntity) {
         return UserDto.builder()
                 .username(userEntity.getUsername())
                 .firstName(userEntity.getFirstName())

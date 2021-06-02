@@ -17,9 +17,9 @@ import static javax.persistence.GenerationType.SEQUENCE;
 @Setter
 @Table(name = "users",
         uniqueConstraints = {
-            @UniqueConstraint(name = "user_email_unique", columnNames = "email"),
-            @UniqueConstraint(name = "username_unique", columnNames = "username")
-}
+                @UniqueConstraint(name = "user_email_unique", columnNames = "email"),
+                @UniqueConstraint(name = "username_unique", columnNames = "username")
+        }
 )
 public class UserEntity {
     @Id
@@ -77,7 +77,7 @@ public class UserEntity {
         this.balance = 0L;
     }
 
-    public UserEntity (UserDto userDto) {
+    public UserEntity(UserDto userDto) {
         this.username = userDto.getUsername();
         this.firstName = userDto.getFirstName();
         this.lastName = userDto.getLastName();

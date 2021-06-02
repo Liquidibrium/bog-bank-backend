@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 @Service
 public interface TransactionService {
 
-    Boolean transferMoney(String usernameFrom,String usernameTo, Long amount);
+    Boolean transferMoney(String usernameFrom, String usernameTo, Long amount);
 
     Boolean transferMoney(TransferDto transferDto);
 }

@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.model.UserDto;
 import com.example.demo.service.user.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +15,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/user")
+@Slf4j
 public class UserController {
 
     private final UserService userService;
@@ -24,8 +26,14 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<List<UserDto>> getUsers() {
-        List<UserDto> userDtoList = userService.getAllUsers();
-        return new ResponseEntity<>(userDtoList, HttpStatus.OK);
+        try {
+            List<UserDto> userDtoList = userService.getAllUsers();
+            log.info("return info about all users ");
+            return new ResponseEntity<>(userDtoList, HttpStatus.OK);
+        } catch (Exception e) {
+            log.warn("error while getting all users ");
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("{username}")
