@@ -3,10 +3,12 @@ package com.example.demo.service.email;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -19,6 +21,9 @@ class EmailService implements EmailSender {
             .getLogger(EmailService.class);
 
     private final JavaMailSender mailSender;
+
+//    @Value("${my.email.name}")
+//    private final String mail;
 
     @Override
     @Async
