@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/demo/bank-backend.iml" filepath="$PROJECT_DIR$/demo/bank-backend.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/bog-bank-backend.iml" filepath="$PROJECT_DIR$/.idea/bog-bank-backend.iml" />
-      <module fileurl="file://$PROJECT_DIR$/bog-valute-converter/bog-valute-converter.iml" filepath="$PROJECT_DIR$/bog-valute-converter/bog-valute-converter.iml" />
-      <module fileurl="file://$PROJECT_DIR$/demo/demo.iml" filepath="$PROJECT_DIR$/demo/demo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bog-valute-converter/currency-converter.iml" filepath="$PROJECT_DIR$/bog-valute-converter/currency-converter.iml" />
     </modules>
   </component>
 </project>
