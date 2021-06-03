@@ -22,6 +22,7 @@ public class TransactionServiceDB implements TransactionService {
                 TransactionValidator.validateTransaction(usernameFrom, usernameTo, amount);
         if (valid) {
             // main logic
+
         }
         return null;
     }

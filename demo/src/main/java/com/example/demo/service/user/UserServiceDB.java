@@ -1,8 +1,13 @@
 package com.example.demo.service.user;
 
 import com.example.demo.entitiy.UserEntity;
+import com.example.demo.exception.UserAlreadyExistsException;
+import com.example.demo.exception.UserNotFoundException;
 import com.example.demo.model.UserDto;
 import com.example.demo.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.User;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,6 +15,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class UserServiceDB implements UserService {
 
     private final UserRepository userRepository;
@@ -27,8 +33,60 @@ public class UserServiceDB implements UserService {
     }
 
     @Override
-    public Optional<UserDto> getUserDtoByUsername(String username) {
+    public UserDto getUserDtoByUsername(@NotNull String username) throws UserNotFoundException {
         Optional<UserEntity> userEntityOptional = userRepository.findByUsername(username);
-        return userEntityOptional.map(UserDto::entityToDto);
+        if (userEntityOptional.isPresent()) {
+            return UserDto.entityToDto(userEntityOptional.get());
+        }
+        throw new UserNotFoundException(username);
+    }
+
+    @Override
+    public UserDto getUserDtoById(@NotNull Long id) {
+        Optional<UserEntity> userEntityOptional = userRepository.findById(id);
+        if (userEntityOptional.isPresent()) {
+            return UserDto.entityToDto(userEntityOptional.get());
+        }
+        throw new UserNotFoundException(id);
+    }
+
+    @Override
+    public UserDto createUser(@NotNull UserDto newUser) {
+        UserEntity entity = new UserEntity(newUser);
+        try {
+            UserEntity user = userRepository.save(entity);
+            return UserDto.entityToDto(user);
+
+        } catch (Exception e) {
+            log.warn("could not create user ");
+            throw new UserAlreadyExistsException(newUser.getUsername());
+        }
+    }
+
+    @Override
+    public UserDto updateUser(@NotNull UserDto userDto) {
+        Optional<UserEntity> userEntityOptional = userRepository.findByUsername(userDto.getUsername());
+        UserEntity userEntity;
+        if (userEntityOptional.isPresent()) {
+            userEntity = userEntityOptional.get();
+            userEntity.setUserDto(userDto);
+        } else {
+            userEntity = new UserEntity(userDto);
+        }
+        userEntity = userRepository.save(userEntity);
+        return UserDto.entityToDto(userEntity);
+    }
+
+    @Override
+    public UserDto deleteUserByUsername(@NotNull String username) {
+        try {
+            UserDto user = getUserDtoByUsername(username);
+            int num = userRepository.deleteUserEntityByUsername(username);
+            System.out.println("deleted " + num);
+            return user;
+        } catch (RuntimeException e) {
+            log.warn("could not delete user : %s".formatted(username));
+            throw new UserNotFoundException(username);
+        }
     }
 }

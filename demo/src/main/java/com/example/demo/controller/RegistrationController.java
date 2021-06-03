@@ -1,39 +1,33 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.UserDto;
-import com.example.demo.service.registration.RegistrationService;
+import com.example.demo.service.user.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import static com.example.demo.controller.UserController.getUserDtoResponseEntity;
 
 @RestController
 @RequestMapping("/api/registration")
 @Slf4j
 public class RegistrationController {
 
-    private final RegistrationService registrationService;
+    private final UserService userService;
 
-    public RegistrationController(RegistrationService registrationService) {
-        this.registrationService = registrationService;
+    public RegistrationController(UserService userService) {
+        this.userService = userService;
     }
 
     @PostMapping()
     public ResponseEntity<UserDto> createUser(@RequestBody UserDto newUser) {
-        UserDto createdUserDto = null;
-        try {
-            createdUserDto = registrationService.createUser(newUser);
-            log.info("failed to create user ");
-            return new ResponseEntity<>(createdUserDto, HttpStatus.CREATED);
-        } catch (Exception e) {
-            log.warn("failed to create user ");
-            return new ResponseEntity<>(createdUserDto, HttpStatus.BAD_REQUEST);
-        }
+        return getUserDtoResponseEntity(newUser, userService, log);
 
     }
 
     @GetMapping
     public ResponseEntity<String> getRegistrationString() {
-        return new ResponseEntity<>("Please Register", HttpStatus.OK);
+        return new ResponseEntity<>("<p>Please Register</p>", HttpStatus.OK);
     }
 }

@@ -86,4 +86,11 @@ public class UserEntity {
         this.balance = 0L;
     }
 
+    public void setUserDto(UserDto userDto) {
+        this.username = userDto.getUsername();
+        this.firstName = userDto.getFirstName();
+        this.lastName = userDto.getLastName();
+        this.password = userDto.getPassword();
+        this.email = userDto.getEmail();
+    }
 }
