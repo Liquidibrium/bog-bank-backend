@@ -18,7 +18,8 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     @NotNull
     List<UserEntity> findAll();
 
-    @Modifying
-    int deleteUserEntityByUsername(@NotNull String username);
+//    @Modifying TODO delete
+    void deleteUserEntityByUsername(String username);
 
+    void delete(UserEntity userEntity);
 }

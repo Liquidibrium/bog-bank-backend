@@ -6,7 +6,6 @@ import com.example.demo.exception.UserNotFoundException;
 import com.example.demo.model.UserDto;
 import com.example.demo.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.User;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
@@ -80,13 +79,15 @@ public class UserServiceDB implements UserService {
     @Override
     public UserDto deleteUserByUsername(@NotNull String username) {
         try {
-            UserDto user = getUserDtoByUsername(username);
-            int num = userRepository.deleteUserEntityByUsername(username);
-            System.out.println("deleted " + num);
-            return user;
+            Optional<UserEntity> userEntity = userRepository.findByUsername(username);
+            if (userEntity.isPresent()) {
+                userRepository.delete(userEntity.get());
+                return UserDto.entityToDto(userEntity.get());
+            }
         } catch (RuntimeException e) {
-            log.warn("could not delete user : %s".formatted(username));
-            throw new UserNotFoundException(username);
+            e.printStackTrace();
         }
+        log.warn("could not delete user : %s".formatted(username));
+        throw new UserNotFoundException(username);
     }
 }

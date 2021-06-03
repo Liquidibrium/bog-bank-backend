@@ -27,9 +27,11 @@ public class TransactionEntity {
     private Long id;
     @Column(name = "from_user_id",
             nullable = false)
+    // TODO FOREIGN KEY
     private Long fromUserId;
     @Column(name = "to_user_id",
             nullable = false)
+    // TODO FOREIGN KEY
     private Long toUserId;
     @Column(name = "amount",
             nullable = false)

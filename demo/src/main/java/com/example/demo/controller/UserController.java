@@ -49,8 +49,13 @@ public class UserController {
 
     @DeleteMapping("{username}")
     public ResponseEntity<UserDto> deleteUser(@PathVariable String username) {
-        userService.deleteUserByUsername(username);
-        return new ResponseEntity<>(null, HttpStatus.OK);
+        try {
+            UserDto userDto = userService.deleteUserByUsername(username);
+            return new ResponseEntity<>(userDto, HttpStatus.OK);
+        } catch (UserNotFoundException e) {
+            log.warn("user not found by username: %s".formatted(username));
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("id/{id}")
@@ -91,7 +96,6 @@ public class UserController {
             UserDto createdUserDto = userService.createUser(newUser);
             log.info("creates new user: %s".formatted(newUser.getUsername()));
             return new ResponseEntity<>(createdUserDto, HttpStatus.CREATED);
-
         } catch (Exception e) {
             log.warn("could not create new user");
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
