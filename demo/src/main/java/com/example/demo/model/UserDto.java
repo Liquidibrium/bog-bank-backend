@@ -3,13 +3,15 @@ package com.example.demo.model;
 import com.example.demo.entitiy.UserEntity;
 import lombok.*;
 
+import java.io.Serializable;
+
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
 
-public class UserDto {
+public class UserDto implements Serializable {
 
     private String username;
     private String firstName;
