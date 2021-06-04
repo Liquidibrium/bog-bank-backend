@@ -51,6 +51,7 @@ public class UserController {
     public ResponseEntity<UserDto> deleteUser(@PathVariable String username) {
         try {
             UserDto userDto = userService.deleteUserByUsername(username);
+            log.info("successfully deleted user : %s".formatted(username));
             return new ResponseEntity<>(userDto, HttpStatus.OK);
         } catch (UserNotFoundException e) {
             log.warn("user not found by username: %s".formatted(username));

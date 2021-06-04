@@ -8,10 +8,10 @@
         <version>2.5.0</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.example</groupId>
-    <artifactId>bog-valute-converter</artifactId>
+    <groupId>ge.bog</groupId>
+    <artifactId>bog-currency-converter</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>bog-valute-converter</name>
+    <name>bog-currency-converter</name>
     <description>Demo project for Spring Boot</description>
     <properties>
         <java.version>16</java.version>
