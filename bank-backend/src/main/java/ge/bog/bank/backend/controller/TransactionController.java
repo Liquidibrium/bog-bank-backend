@@ -1,5 +1,6 @@
 package ge.bog.bank.backend.controller;
 
+import ge.bog.bank.backend.entitiy.TransactionEntity;
 import ge.bog.bank.backend.model.TransferDto;
 import ge.bog.bank.backend.service.transaction.TransactionService;
 import lombok.extern.slf4j.Slf4j;
@@ -35,11 +36,11 @@ public class TransactionController {
 //    }`
 
     @PostMapping()
-    private ResponseEntity<String> makeTransaction(@RequestBody TransferDto transferDto) {
+    private ResponseEntity<TransactionEntity> makeTransaction(@RequestBody TransferDto transferDto) {
         try {
-            Boolean res = transactionService.transferMoney(transferDto);
+            TransactionEntity  transactionEntity = transactionService.transferMoney(transferDto);
             log.info("successfully transferred money ");
-            return new ResponseEntity<>(res.toString(), HttpStatus.OK);
+            return new ResponseEntity<>(transactionEntity, HttpStatus.OK);
         } catch (Exception e) {
             log.error("failed to make transaction ");
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);

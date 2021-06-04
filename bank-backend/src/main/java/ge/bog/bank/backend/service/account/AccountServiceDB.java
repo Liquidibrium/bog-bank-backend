@@ -6,8 +6,6 @@ import ge.bog.bank.backend.exception.AccountNotFoundException;
 import ge.bog.bank.backend.exception.InvalidCurrencyException;
 import ge.bog.bank.backend.exception.InvalidUserException;
 import ge.bog.bank.backend.exception.UserNotFoundException;
-import ge.bog.bank.backend.model.AccountDto;
-import ge.bog.bank.backend.model.UserDto;
 import ge.bog.bank.backend.repository.AccountRepository;
 import ge.bog.bank.backend.repository.UserRepository;
 import org.jetbrains.annotations.NotNull;
@@ -15,8 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java.util.Set;
-import java.util.concurrent.locks.StampedLock;
-import java.util.stream.Collectors;
 
 @Service
 public class AccountServiceDB implements AccountService {
@@ -43,14 +39,14 @@ public class AccountServiceDB implements AccountService {
     }
 
     @Override
-    public AccountEntity addAccount(String username, String currency) throws InvalidCurrencyException , UserNotFoundException{
+    public AccountEntity addAccount(String username, String currency) throws InvalidCurrencyException, UserNotFoundException {
         CurrencyValidator.validate(currency);
         Optional<UserEntity> userEntityOptional = userRepository.findByUsername(username);
         if (userEntityOptional.isPresent()) {
             UserEntity user = userEntityOptional.get();
             AccountEntity acc = new AccountEntity(currency, user);
             accountRepository.save(acc);
-            return  acc;
+            return acc;
         }
         throw new UserNotFoundException(username);
     }
@@ -58,12 +54,12 @@ public class AccountServiceDB implements AccountService {
     @Override
     public AccountEntity getAccount(String username, Long accId) {
         Optional<AccountEntity> accountEntityOptional = accountRepository.findById(accId);
-        if(accountEntityOptional.isPresent()){
+        if (accountEntityOptional.isPresent()) {
             AccountEntity account = accountEntityOptional.get();
-            if(!account.getUser().getUsername().equals(username)){
+            if (!account.getUser().getUsername().equals(username)) {
                 throw new InvalidUserException(username);
             }
-            return  account;
+            return account;
         }
         throw new AccountNotFoundException(accId);
     }

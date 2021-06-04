@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 
 public class TransactionValidator {
 
-    public static Boolean validateTransaction(AccountEntity usernameFrom, AccountEntity usernameTo, BigDecimal amount) {
+    public static Boolean validateTransaction(Long usernameFrom, Long usernameTo, BigDecimal amount) {
         return true;
     }
 
