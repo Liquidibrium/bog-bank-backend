@@ -8,6 +8,9 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import static javax.persistence.GenerationType.SEQUENCE;
 
 @Entity(name = "users")
@@ -30,7 +33,7 @@ public class UserEntity {
             strategy = SEQUENCE,
             generator = "user_seq"
     )
-    @Column(name = "id",
+    @Column(name = "user_id",
             updatable = false)
     private Long id;
 
@@ -59,10 +62,9 @@ public class UserEntity {
     )
     private String email;
 
-    @Column(name = "balance",
-            nullable = false
-    )
-    private Long balance;
+
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    private Set<AccountEntity> accountEntityList = new HashSet<>();
 
     public UserEntity(String username,
                       String firstName,
@@ -74,7 +76,6 @@ public class UserEntity {
         this.lastName = lastName;
         this.password = password;
         this.email = email;
-        this.balance = 0L;
     }
 
     public UserEntity(UserDto userDto) {
@@ -83,7 +84,6 @@ public class UserEntity {
         this.lastName = userDto.getLastName();
         this.password = userDto.getPassword();
         this.email = userDto.getEmail();
-        this.balance = 0L;
     }
 
     public void setUserDto(UserDto userDto) {

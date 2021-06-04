@@ -4,6 +4,7 @@ package ge.bog.bank.backend.entitiy;
 import lombok.*;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import static javax.persistence.GenerationType.SEQUENCE;
@@ -13,6 +14,7 @@ import static javax.persistence.GenerationType.SEQUENCE;
 @AllArgsConstructor
 @Getter
 @Setter
+@EqualsAndHashCode
 public class TransactionEntity {
 
     @Id
@@ -22,30 +24,33 @@ public class TransactionEntity {
             strategy = SEQUENCE,
             generator = "transaction_seq"
     )
-    @Column(name = "id",
+    @Column(name = "transaction_id",
             updatable = false)
     private Long id;
-    @Column(name = "from_user_id",
-            nullable = false)
-    // TODO FOREIGN KEY
-    private Long fromUserId;
-    @Column(name = "to_user_id",
-            nullable = false)
-    // TODO FOREIGN KEY
-    private Long toUserId;
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "account_from", nullable = false)
+    private AccountEntity fromAcc;
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "account_to", nullable = false)
+    private AccountEntity toAcc;
+
     @Column(name = "amount",
             nullable = false)
-    private Long amount;
+    private BigDecimal amount;
+
     @Column(name = "time",
             nullable = false)
     private LocalDateTime time;
 
-    public TransactionEntity(Long fromUserId,
-                             Long toUserId,
-                             Long amount) {
-        this.fromUserId = fromUserId;
-        this.toUserId = toUserId;
+    public TransactionEntity(AccountEntity fromAcc, AccountEntity toAcc, BigDecimal amount) {
+        this.fromAcc = fromAcc;
+        this.toAcc = toAcc;
         this.amount = amount;
         this.time = LocalDateTime.now();
     }
+
 }
