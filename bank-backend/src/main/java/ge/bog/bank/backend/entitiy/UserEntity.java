@@ -1,5 +1,6 @@
 package ge.bog.bank.backend.entitiy;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import ge.bog.bank.backend.model.UserDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,6 +9,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -22,9 +24,8 @@ import static javax.persistence.GenerationType.SEQUENCE;
         uniqueConstraints = {
                 @UniqueConstraint(name = "user_email_unique", columnNames = "email"),
                 @UniqueConstraint(name = "username_unique", columnNames = "username")
-        }
-)
-public class UserEntity {
+        })
+public class UserEntity implements Serializable {
     @Id
     @SequenceGenerator(name = "user_seq",
             sequenceName = "user_seq",
@@ -34,7 +35,7 @@ public class UserEntity {
             generator = "user_seq")
     @Column(name = "user_id",
             updatable = false)
-    private Long id;
+    private Long userId;
 
     @Column(name = "username",
             nullable = false
@@ -54,6 +55,7 @@ public class UserEntity {
     @Column(name = "password",
             nullable = false
     )
+    @JsonIgnore
     private String password;
 
     @Column(name = "email",
@@ -61,21 +63,11 @@ public class UserEntity {
     )
     private String email;
 
-
     @OneToMany(mappedBy = "user", orphanRemoval = true)
-    private Set<AccountEntity> accountEntityList = new HashSet<>();
+//    @RestResource(path = "libraryAddress", rel = "address")
+    @JsonIgnore
+    private Set<AccountEntity> accountList = new HashSet<>();
 
-    public UserEntity(String username,
-                      String firstName,
-                      String lastName,
-                      String password,
-                      String email) {
-        this.username = username;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.password = password;
-        this.email = email;
-    }
 
     public UserEntity(UserDto userDto) {
         this.username = userDto.getUsername();
@@ -83,6 +75,7 @@ public class UserEntity {
         this.lastName = userDto.getLastName();
         this.password = userDto.getPassword();
         this.email = userDto.getEmail();
+        this.accountList.add(new AccountEntity("GEL",this));
     }
 
     public void setUserDto(UserDto userDto) {
@@ -91,5 +84,11 @@ public class UserEntity {
         this.lastName = userDto.getLastName();
         this.password = userDto.getPassword();
         this.email = userDto.getEmail();
+        this.accountList = userDto.getAccountList();
     }
+
+    public void addAccount(AccountEntity accountEntity) {
+        accountList.add(accountEntity);
+    }
+
 }

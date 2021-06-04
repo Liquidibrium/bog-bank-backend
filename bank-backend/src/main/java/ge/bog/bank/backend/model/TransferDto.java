@@ -1,8 +1,11 @@
 package ge.bog.bank.backend.model;
 
+import ge.bog.bank.backend.entitiy.AccountEntity;
 import lombok.*;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -11,8 +14,9 @@ import java.io.Serializable;
 @ToString
 public class TransferDto implements Serializable {
 
-    private String usernameFrom;
-    private String usernameTo;
-    private Long amount;
+    private AccountEntity accFrom;
+    private AccountEntity accTo;
+    private BigDecimal amount;
+    private LocalDateTime time;
 
 }

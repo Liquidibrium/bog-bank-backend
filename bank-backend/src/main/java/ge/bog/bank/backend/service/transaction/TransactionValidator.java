@@ -1,8 +1,12 @@
 package ge.bog.bank.backend.service.transaction;
 
+import ge.bog.bank.backend.entitiy.AccountEntity;
+
+import java.math.BigDecimal;
+
 public class TransactionValidator {
 
-    public static Boolean validateTransaction(String usernameFrom, String usernameTo, Long amount) {
+    public static Boolean validateTransaction(AccountEntity usernameFrom, AccountEntity usernameTo, BigDecimal amount) {
         return true;
     }
 

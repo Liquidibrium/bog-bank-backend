@@ -19,20 +19,20 @@ public class TransactionController {
     }
 
 
-    //    TODO  remove
-    @GetMapping("/{usernameFrom}")
-    private ResponseEntity<String> makeTransaction(@PathVariable String usernameFrom,
-                                                   @RequestParam String usernameTo,
-                                                   @RequestParam Long amount) {
-        try {
-            Boolean res = transactionService.transferMoney(usernameFrom, usernameTo, amount);
-            log.info("successfully transferred money ");
-            return new ResponseEntity<>(res.toString(), HttpStatus.OK);
-        } catch (Exception e) {
-            log.error("failed to make transaction ");
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-        }
-    }
+//   ` //    TODO  remove
+//    @GetMapping("/{usernameFrom}")
+//    private ResponseEntity<String> makeTransaction(@PathVariable String usernameFrom,
+//                                                   @RequestParam String usernameTo,
+//                                                   @RequestParam Long amount) {
+//        try {
+//            Boolean res = transactionService.transferMoney(usernameFrom, usernameTo, amount);
+//            log.info("successfully transferred money ");
+//            return new ResponseEntity<>(res.toString(), HttpStatus.OK);
+//        } catch (Exception e) {
+//            log.error("failed to make transaction ");
+//            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+//        }
+//    }`
 
     @PostMapping()
     private ResponseEntity<String> makeTransaction(@RequestBody TransferDto transferDto) {

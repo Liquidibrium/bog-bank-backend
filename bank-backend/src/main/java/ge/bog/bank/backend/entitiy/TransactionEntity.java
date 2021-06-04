@@ -4,6 +4,7 @@ package ge.bog.bank.backend.entitiy;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -15,7 +16,7 @@ import static javax.persistence.GenerationType.SEQUENCE;
 @Getter
 @Setter
 @EqualsAndHashCode
-public class TransactionEntity {
+public class TransactionEntity implements Serializable {
 
     @Id
     @SequenceGenerator(name = "transaction_seq",
@@ -27,17 +28,17 @@ public class TransactionEntity {
     )
     @Column(name = "transaction_id",
             updatable = false)
-    private Long id;
+    private Long transactionId;
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "account_from",
             foreignKey = @ForeignKey(name = "transaction_acc_from_fk"),
             nullable = false)
     private AccountEntity fromAcc;
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "account_to",
             foreignKey = @ForeignKey(name = "transaction_acc_to_fk"),
             nullable = false)
