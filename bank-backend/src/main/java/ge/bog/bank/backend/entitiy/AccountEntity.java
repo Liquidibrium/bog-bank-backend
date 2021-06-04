@@ -60,8 +60,6 @@ public class AccountEntity implements Serializable {
     public AccountEntity(AccountDto accountDto) {
         this.currency = accountDto.getCurrency();
         this.user = accountDto.getUser();
-        this.transactionSetTo = accountDto.getTransactionEntitySetTo();
-        this.transactionSetFrom = accountDto.getTransactionEntitySetFrom();
     }
 
     public void addTransactionTo(TransactionEntity transactionEntity) {

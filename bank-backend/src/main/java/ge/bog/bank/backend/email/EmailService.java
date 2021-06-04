@@ -1,4 +1,4 @@
-package ge.bog.bank.backend.service.email;
+package ge.bog.bank.backend.email;
 
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;

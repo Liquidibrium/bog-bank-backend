@@ -1,12 +1,15 @@
 package ge.bog.bank.backend.service.user;
 
+import ge.bog.bank.backend.entitiy.AccountEntity;
 import ge.bog.bank.backend.entitiy.UserEntity;
 import ge.bog.bank.backend.exception.UserAlreadyExistsException;
 import ge.bog.bank.backend.exception.UserNotFoundException;
 import ge.bog.bank.backend.model.UserDto;
+import ge.bog.bank.backend.repository.AccountRepository;
 import ge.bog.bank.backend.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,9 +21,11 @@ import java.util.stream.Collectors;
 public class UserServiceDB implements UserService {
 
     private final UserRepository userRepository;
+    private final AccountRepository accountRepository;
 
-    public UserServiceDB(UserRepository userRepository) {
+    public UserServiceDB(UserRepository userRepository, AccountRepository accountRepository) {
         this.userRepository = userRepository;
+        this.accountRepository = accountRepository;
     }
 
     @Override
@@ -54,6 +59,7 @@ public class UserServiceDB implements UserService {
         UserEntity entity = new UserEntity(newUser);
         try {
             UserEntity user = userRepository.save(entity);
+            accountRepository.save(new AccountEntity("GEl", user));
             return UserDto.entityToDto(user);
 
         } catch (Exception e) {
@@ -68,11 +74,13 @@ public class UserServiceDB implements UserService {
         UserEntity userEntity;
         if (userEntityOptional.isPresent()) {
             userEntity = userEntityOptional.get();
-            userEntity.setUserDto(userDto);
+//            userEntity.setUserDto(userDto);
+            userEntity = userRepository.save(userEntity);
         } else {
             userEntity = new UserEntity(userDto);
+            userEntity = userRepository.save(userEntity);
+            accountRepository.save(new AccountEntity("GEl", userEntity));
         }
-        userEntity = userRepository.save(userEntity);
         return UserDto.entityToDto(userEntity);
     }
 

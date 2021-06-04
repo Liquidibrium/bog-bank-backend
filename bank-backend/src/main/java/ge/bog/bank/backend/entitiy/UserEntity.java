@@ -65,8 +65,9 @@ public class UserEntity implements Serializable {
 
     @OneToMany(mappedBy = "user", orphanRemoval = true)
 //    @RestResource(path = "libraryAddress", rel = "address")
+    // cascade
     @JsonIgnore
-    private Set<AccountEntity> accountList = new HashSet<>();
+    private Set<AccountEntity> accountSet = new HashSet<>();
 
 
     public UserEntity(UserDto userDto) {
@@ -75,7 +76,6 @@ public class UserEntity implements Serializable {
         this.lastName = userDto.getLastName();
         this.password = userDto.getPassword();
         this.email = userDto.getEmail();
-        this.accountList.add(new AccountEntity("GEL",this));
     }
 
     public void setUserDto(UserDto userDto) {
@@ -84,11 +84,10 @@ public class UserEntity implements Serializable {
         this.lastName = userDto.getLastName();
         this.password = userDto.getPassword();
         this.email = userDto.getEmail();
-        this.accountList = userDto.getAccountList();
     }
 
     public void addAccount(AccountEntity accountEntity) {
-        accountList.add(accountEntity);
+        accountSet.add(accountEntity);
     }
 
 }

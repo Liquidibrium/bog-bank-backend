@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/registration")
-@Slf4j
 public class RegistrationController {
 
     private final UserService userService;
@@ -20,7 +19,7 @@ public class RegistrationController {
 
     @PostMapping()
     public ResponseEntity<UserDto> createUser(@RequestBody UserDto newUser) {
-        return UserController.getUserDtoResponseEntity(newUser, userService, log);
+        return UserController.getUserDtoResponseEntity(newUser, userService);
 
     }
 

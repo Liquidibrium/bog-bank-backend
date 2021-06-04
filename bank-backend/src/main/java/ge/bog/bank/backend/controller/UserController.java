@@ -73,7 +73,7 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<UserDto> createUser(@RequestBody UserDto newUser) {
-        return getUserDtoResponseEntity(newUser, userService, log);
+        return getUserDtoResponseEntity(newUser, userService);
     }
 
 
@@ -91,8 +91,7 @@ public class UserController {
 
     @NotNull
     static ResponseEntity<UserDto> getUserDtoResponseEntity(@RequestBody UserDto newUser,
-                                                            UserService userService,
-                                                            Logger log) {
+                                                            UserService userService) {
         try {
             UserDto createdUserDto = userService.createUser(newUser);
             log.info("created new user: %s".formatted(newUser.getUsername()));

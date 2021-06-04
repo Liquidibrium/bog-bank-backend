@@ -20,18 +20,11 @@ public class AccountDto {
 
     private String currency;
 
-    @JsonIgnore
-    private Set<TransactionEntity> transactionEntitySetTo;
 
-    @JsonIgnore
-    private Set<TransactionEntity> transactionEntitySetFrom;
-
-    public AccountDto EntityToDto(AccountEntity accountEntity) {
+    public static AccountDto EntityToDto(AccountEntity accountEntity) {
         return AccountDto.builder()
                 .user(accountEntity.getUser())
                 .balance(accountEntity.getBalance())
-                .transactionEntitySetTo(accountEntity.getTransactionSetTo())
-                .transactionEntitySetFrom(accountEntity.getTransactionSetFrom())
                 .currency(accountEntity.getCurrency())
                 .build();
     }
