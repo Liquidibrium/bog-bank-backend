@@ -27,12 +27,11 @@ import static javax.persistence.GenerationType.SEQUENCE;
 public class UserEntity {
     @Id
     @SequenceGenerator(name = "user_seq",
-            sequenceName = "user_seq"
-    )
+            sequenceName = "user_seq",
+            allocationSize = 1)
     @GeneratedValue(
             strategy = SEQUENCE,
-            generator = "user_seq"
-    )
+            generator = "user_seq")
     @Column(name = "user_id",
             updatable = false)
     private Long id;

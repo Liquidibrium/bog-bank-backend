@@ -21,7 +21,8 @@ public class AccountEntity {
 
     @Id
     @SequenceGenerator(name = "account_seq",
-            sequenceName = "account_seq"
+            sequenceName = "account_seq",
+            allocationSize = 1
     )
     @GeneratedValue(
             strategy = SEQUENCE,
@@ -38,7 +39,7 @@ public class AccountEntity {
     private BigDecimal balance;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    private UserEntity user;
+    private UserEntity user; // TODO change FK name
 
     @OneToMany(mappedBy = "toAcc")
     private Set<TransactionEntity> transactionEntityListTo = new HashSet<>();
