@@ -62,6 +62,12 @@ public class AccountEntity implements Serializable {
         this.user = accountDto.getUser();
     }
 
+    public AccountEntity(String currency, UserEntity user, BigDecimal balance) {
+        this.currency = currency;
+        this.user = user;
+        this.balance = balance;
+    }
+
     public void addTransactionTo(TransactionEntity transactionEntity) {
         transactionSetTo.add(transactionEntity);
     }

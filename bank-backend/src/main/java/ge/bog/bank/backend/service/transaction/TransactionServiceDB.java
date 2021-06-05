@@ -2,56 +2,66 @@ package ge.bog.bank.backend.service.transaction;
 
 import ge.bog.bank.backend.entitiy.AccountEntity;
 import ge.bog.bank.backend.entitiy.TransactionEntity;
+import ge.bog.bank.backend.exception.AccountNotFoundException;
+import ge.bog.bank.backend.exception.InvalidBankTransactionException;
+import ge.bog.bank.backend.exception.NotEnoughMoneyException;
 import ge.bog.bank.backend.model.TransferDto;
+import ge.bog.bank.backend.repository.AccountRepository;
 import ge.bog.bank.backend.repository.TransactionRepository;
 import ge.bog.bank.backend.repository.UserRepository;
-import ge.bog.bank.backend.util.HibernateAnnotationUtil;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.SharedSessionContract;
-import org.hibernate.Transaction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 @Service
 public class TransactionServiceDB implements TransactionService {
 
     private final TransactionRepository transactionRepository;
     private final UserRepository userRepository;
+    private final AccountRepository accountRepository;
 
-    public TransactionServiceDB(TransactionRepository transactionRepository, UserRepository userRepository) {
+    public TransactionServiceDB(TransactionRepository transactionRepository, UserRepository userRepository, AccountRepository accountRepository) {
         this.transactionRepository = transactionRepository;
         this.userRepository = userRepository;
+        this.accountRepository = accountRepository;
     }
 
     @Override
     @Transactional
-    public TransactionEntity transferMoney(Long usernameFrom, Long usernameTo, BigDecimal amount) {
+    public TransactionEntity transferMoney(Long accIDFrom, Long accIDTo, BigDecimal amount) {
         boolean valid = // validate if usernameFrom is valid
-                TransactionValidator.validateTransaction(usernameFrom, usernameTo, amount);
+                TransactionValidator.validateTransaction(accIDFrom, accIDTo, amount);
         if (valid) {
-            // main logic
-            SessionFactory sessionFactory = HibernateAnnotationUtil.getSessionFactory();
-            Session session = sessionFactory.getCurrentSession();
-            System.out.println("Session created");
-
-            Transaction tx = session.beginTransaction();
-
-//            session.save(cart);
-//            session.save(item1);
-//            session.save(item2);
-
-            tx.commit();
+            Optional<AccountEntity> optionalAccountFrom = accountRepository.findById(accIDFrom);
+            if (optionalAccountFrom.isPresent()) {
+                AccountEntity accFrom = optionalAccountFrom.get();
+                if (accFrom.getBalance().compareTo(amount) >= 0) {
+                    Optional<AccountEntity> optionalAccTo = accountRepository.findById(accIDTo);
+                    if (optionalAccTo.isPresent()) {
+                        AccountEntity accTo = optionalAccTo.get();
+                        accFrom.setBalance(accFrom.getBalance().subtract(amount));
+                        accTo.setBalance(accTo.getBalance().add(amount));
+                        TransactionEntity transaction = new TransactionEntity(accFrom, accTo, amount);
+                        accountRepository.save(accFrom);
+                        accountRepository.save(accTo);
+                        transactionRepository.save(transaction);
+                        return transaction;
+                    }
+                    throw new AccountNotFoundException(accIDTo);
+                }
+                throw new NotEnoughMoneyException(accIDFrom, amount,accFrom.getCurrency());
+            }
+            throw new AccountNotFoundException(accIDFrom);
         }
-        return null;
+        throw new InvalidBankTransactionException(accIDFrom, accIDTo, amount);
     }
 
     @Override
     public TransactionEntity transferMoney(TransferDto transferDto) {
-        return transferMoney(transferDto.getAccFrom(),
-                transferDto.getAccTo(),
+        return transferMoney(transferDto.getAccIDFrom(),
+                transferDto.getAccIDTo(),
                 transferDto.getAmount());
     }
 }

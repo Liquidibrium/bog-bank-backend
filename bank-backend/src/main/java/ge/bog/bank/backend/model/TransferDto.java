@@ -13,8 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @ToString
 public class TransferDto implements Serializable {
-    private Long accFrom;
-    private Long accTo;
+    private Long accIDFrom;
+    private Long accIDTo;
     private BigDecimal amount;
-
 }

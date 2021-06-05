@@ -13,10 +13,10 @@ import javax.mail.internet.MimeMessage;
 
 @Service
 @AllArgsConstructor
-class EmailService implements EmailSender {
+class EmailSenderImpl implements EmailSender {
 
     private final static Logger LOGGER = LoggerFactory
-            .getLogger(EmailService.class);
+            .getLogger(EmailSenderImpl.class);
 
     private final JavaMailSender mailSender;
 

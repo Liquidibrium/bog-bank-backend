@@ -5,7 +5,6 @@ import ge.bog.bank.backend.model.UserDto;
 import ge.bog.bank.backend.service.user.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

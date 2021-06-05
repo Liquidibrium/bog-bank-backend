@@ -9,9 +9,9 @@ import ge.bog.bank.backend.repository.AccountRepository;
 import ge.bog.bank.backend.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -59,7 +59,7 @@ public class UserServiceDB implements UserService {
         UserEntity entity = new UserEntity(newUser);
         try {
             UserEntity user = userRepository.save(entity);
-            accountRepository.save(new AccountEntity("GEl", user));
+            accountRepository.save(new AccountEntity("GEl", user, BigDecimal.TEN));// ten GEL Gift!!
             return UserDto.entityToDto(user);
 
         } catch (Exception e) {
@@ -74,7 +74,7 @@ public class UserServiceDB implements UserService {
         UserEntity userEntity;
         if (userEntityOptional.isPresent()) {
             userEntity = userEntityOptional.get();
-//            userEntity.setUserDto(userDto);
+            userEntity.setUserDto(userDto);
             userEntity = userRepository.save(userEntity);
         } else {
             userEntity = new UserEntity(userDto);

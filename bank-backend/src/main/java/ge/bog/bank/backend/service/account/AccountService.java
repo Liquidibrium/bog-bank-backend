@@ -2,9 +2,7 @@ package ge.bog.bank.backend.service.account;
 
 
 import ge.bog.bank.backend.entitiy.AccountEntity;
-import ge.bog.bank.backend.model.AccountDto;
 
-import java.util.List;
 import java.util.Set;
 
 public interface AccountService {
