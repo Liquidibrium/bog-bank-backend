@@ -25,12 +25,12 @@ class EmailSenderImpl implements EmailSender {
 
     @Override
     @Async
-    public void send(String to, String email) {
+    public void send(String to, String text) {
         try {
             MimeMessage mimeMessage = mailSender.createMimeMessage();
             MimeMessageHelper helper =
                     new MimeMessageHelper(mimeMessage, "utf-8");
-            helper.setText(email, true);
+            helper.setText(text, true);
             helper.setTo(to);
             helper.setSubject("Confirm your email");
             helper.setFrom("test@test.com"); // change to default account , form proterties
