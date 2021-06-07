@@ -1,10 +1,10 @@
 package ge.bog.currencyconverter.util;
 
-import ge.bog.currencyconverter.model.CurrencyInfo;
 import com.sun.syndication.feed.synd.SyndEntryImpl;
 import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.io.SyndFeedInput;
 import com.sun.syndication.io.XmlReader;
+import ge.bog.currencyconverter.model.CurrencyInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -29,19 +29,28 @@ public class NbgRssParser implements RssParser {
         time = LocalDateTime.now().minus(REFRESH_TIME, ChronoUnit.MINUTES);
     }
 
-
     @Override
     public Optional<CurrencyInfo> getCurrencyRate(String currency) {
+        refreshCurrencyRates();
+        if (info.containsKey(currency)) {
+            return Optional.ofNullable(info.get(currency));
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public List<CurrencyInfo> getCurrencyRates() {
+        refreshCurrencyRates();
+        return info.values().stream().toList();
+    }
+
+    private void refreshCurrencyRates() {
         LocalDateTime now = LocalDateTime.now();
         if (now.isAfter(time.plus(REFRESH_TIME, ChronoUnit.MINUTES))) {
             if (getNewCurrencyRates()) {
                 time = LocalDateTime.now();
-                return Optional.ofNullable(info.get(currency));
             }
-        } else {
-            return Optional.ofNullable(info.get(currency));
         }
-        return Optional.empty();
     }
 
     private boolean getNewCurrencyRates() {
@@ -49,7 +58,8 @@ public class NbgRssParser implements RssParser {
             URL feedSource = new URL(NATIONAL_BANK_GEORGIA_URL);
             SyndFeedInput input = new SyndFeedInput();
             SyndFeed feed = input.build(new XmlReader(feedSource));
-            String currencies = ((SyndEntryImpl) (feed.getEntries().get(0))).getDescription().getValue();
+            String currencies = ((SyndEntryImpl) (feed.getEntries().get(0)))
+                    .getDescription().getValue();
             String stringWithOutImageTags = RemoveImageTags(currencies);
             getInfo(stringWithOutImageTags);
             return true;
@@ -70,7 +80,7 @@ public class NbgRssParser implements RssParser {
         int index = curr.indexOf(starting);
         while (index != -1) {
             sb.append(curr, starting_index, index);
-            starting_index = curr.indexOf(ending, index) + 10;
+            starting_index = curr.indexOf(ending, index) + ending.length();
             index = curr.indexOf(starting, starting_index);
         }
         sb.append("</tr>");
@@ -94,16 +104,22 @@ public class NbgRssParser implements RssParser {
         return list;
     }
 
+    private static final int NUMBER_OF_XML_TAGS_NEEDED = 4;
+
     private void getInfo(String descriptionText) {
         List<String> list = getCurrencyList(descriptionText);
 
-        for (int i = 0; i < list.size(); i += 4) {
-            CurrencyInfo currencyInfo = new CurrencyInfo();
-            currencyInfo.setName(list.get(i));
+        for (int i = 0; i < list.size(); i += NUMBER_OF_XML_TAGS_NEEDED) {
             int index = list.get(i + 1).strip().indexOf(" ");
-            currencyInfo.setQuantity(Long.valueOf(list.get(i + 1).substring(0, index)));
-            currencyInfo.setDescription(list.get(i + 1).substring(index + 1));
-            currencyInfo.setVal(BigDecimal.valueOf(Double.parseDouble(list.get(i + 2))));
+            String currencyFrom = list.get(i);
+            Long quantity = Long.valueOf(list.get(i + 1).substring(0, index));
+            String currencyDescription = list.get(i + 1).substring(index + 1).trim();
+            BigDecimal value = BigDecimal.valueOf(Double.parseDouble(list.get(i + 2)));
+            CurrencyInfo currencyInfo = new CurrencyInfo(currencyFrom,
+                    currencyDescription,
+                    quantity,
+                    value
+            );
             info.put(list.get(i), currencyInfo);
         }
     }
