@@ -18,7 +18,6 @@ import static javax.persistence.GenerationType.SEQUENCE;
 @AllArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode
 @Table(name = "accounts")
 public class AccountEntity implements Serializable {
 
@@ -67,7 +66,7 @@ public class AccountEntity implements Serializable {
         this.user = user;
         this.balance = balance;
     }
-
+    // TODO add transactions to users too
     public void addTransactionTo(TransactionEntity transactionEntity) {
         transactionSetTo.add(transactionEntity);
     }
@@ -75,4 +74,5 @@ public class AccountEntity implements Serializable {
     public void addTransactionFrom(TransactionEntity transactionEntity) {
         transactionSetFrom.add(transactionEntity);
     }
+
 }

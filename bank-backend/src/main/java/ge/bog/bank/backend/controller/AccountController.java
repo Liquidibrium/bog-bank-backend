@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Set;
 
 @RestController
-@RequestMapping("api/user")
+@RequestMapping("/api/user")
 @Slf4j
 public class AccountController {
     private final AccountService accountService;

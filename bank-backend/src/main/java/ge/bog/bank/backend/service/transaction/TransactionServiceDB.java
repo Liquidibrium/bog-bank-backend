@@ -19,12 +19,10 @@ import java.util.Optional;
 public class TransactionServiceDB implements TransactionService {
 
     private final TransactionRepository transactionRepository;
-    private final UserRepository userRepository;
     private final AccountRepository accountRepository;
 
     public TransactionServiceDB(TransactionRepository transactionRepository, UserRepository userRepository, AccountRepository accountRepository) {
         this.transactionRepository = transactionRepository;
-        this.userRepository = userRepository;
         this.accountRepository = accountRepository;
     }
 
@@ -44,14 +42,17 @@ public class TransactionServiceDB implements TransactionService {
                         accFrom.setBalance(accFrom.getBalance().subtract(amount));
                         accTo.setBalance(accTo.getBalance().add(amount));
                         TransactionEntity transaction = new TransactionEntity(accFrom, accTo, amount);
-                        accountRepository.save(accFrom);
-                        accountRepository.save(accTo);
+                        // is this needed ?? TODO
+//                        accFrom.addTransactionFrom(transaction);
+//                        accTo.addTransactionTo(transaction);
+//                        accountRepository.save(accFrom);
+//                        accountRepository.save(accTo);
                         transactionRepository.save(transaction);
                         return transaction;
                     }
                     throw new AccountNotFoundException(accIDTo);
                 }
-                throw new NotEnoughMoneyException(accIDFrom, amount,accFrom.getCurrency());
+                throw new NotEnoughMoneyException(accIDFrom, amount, accFrom.getCurrency());
             }
             throw new AccountNotFoundException(accIDFrom);
         }

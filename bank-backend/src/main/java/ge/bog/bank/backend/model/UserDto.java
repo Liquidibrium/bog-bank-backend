@@ -1,12 +1,9 @@
 package ge.bog.bank.backend.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import ge.bog.bank.backend.entitiy.AccountEntity;
 import ge.bog.bank.backend.entitiy.UserEntity;
 import lombok.*;
 
 import java.io.Serializable;
-import java.util.Set;
 
 @Data
 @Builder

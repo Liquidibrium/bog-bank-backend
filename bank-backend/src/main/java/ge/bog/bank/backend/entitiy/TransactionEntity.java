@@ -15,7 +15,6 @@ import static javax.persistence.GenerationType.SEQUENCE;
 @AllArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode
 public class TransactionEntity implements Serializable {
 
     @Id

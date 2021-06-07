@@ -1,5 +1,6 @@
 package ge.bog.bank.backend.controller;
 
+import ge.bog.bank.backend.model.currency.ExchangedInfo;
 import ge.bog.bank.backend.service.converter.ConverterService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -10,7 +11,7 @@ import java.math.BigDecimal;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/convert")
+@RequestMapping("/api/convert/")
 @Slf4j
 public class ConverterController {
 
@@ -22,14 +23,14 @@ public class ConverterController {
     }
 
     @GetMapping("/{username}/")
-    public ResponseEntity<BigDecimal> convertCurrency(@PathVariable String username,
-                                                      @RequestParam String currency,
-                                                      @RequestParam BigDecimal amount) {
+    public ResponseEntity<ExchangedInfo> convertCurrency(@PathVariable String username,
+                                                         @RequestParam String currency,
+                                                         @RequestParam BigDecimal amount) {
 
-        Optional<BigDecimal> convert = converterService.convert(username, currency, amount);
-        return convert.map(bigDecimal -> {
+        Optional<ExchangedInfo> convert = converterService.convert(username, currency, amount);
+        return convert.map(exc -> {
             log.info("USER:%s converted %s %s from GEL".formatted(username, currency, amount.toString()));
-            return new ResponseEntity<>(bigDecimal, HttpStatus.OK);
+            return new ResponseEntity<>(exc, HttpStatus.OK);
         })
                 .orElseGet(() -> {
                     log.info("could not convert %s %s from GEL for USER:%s".formatted(currency, amount.toString(), username));

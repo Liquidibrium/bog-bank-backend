@@ -1,4 +1,4 @@
-package ge.bog.bank.backend.service.account;
+package ge.bog.bank.backend.service.converter;
 
 import ge.bog.bank.backend.exception.InvalidCurrencyException;
 

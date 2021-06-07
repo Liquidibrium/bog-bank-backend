@@ -1,6 +1,6 @@
 package ge.bog.bank.backend.service.converter;
 
-import ge.bog.bank.backend.model.CurrencyDto;
+import ge.bog.bank.backend.model.currency.ExchangedInfo;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -14,22 +14,21 @@ public class ConverterServiceImpl implements ConverterService {
 
 
     private final WebClient client;
+    private static final String converterAPIFormat = "%s?amount=%s";
 
     public ConverterServiceImpl(WebClient client) {
         this.client = client;
     }
 
-    public Optional<BigDecimal> getConvertCurrency(String currency, BigDecimal amount) {
-        Mono<CurrencyDto> tmp = client
+    public Optional<ExchangedInfo> getConvertCurrency(String currency, BigDecimal amount) {
+        Mono<ExchangedInfo> exchanged = client
                 .get()
-                .uri("%s?amount=%s".formatted(currency, amount.toString()))
+                .uri(converterAPIFormat.formatted(currency, amount.toString()))
                 .retrieve()
-                .bodyToMono(CurrencyDto.class);
+                .bodyToMono(ExchangedInfo.class);
         try {
-            CurrencyDto crr = tmp.block();
-            if (crr != null) {
-                return Optional.ofNullable(crr.getAmount());
-            }
+            ExchangedInfo exc = exchanged.block(); // async
+            return Optional.ofNullable(exc);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -43,9 +42,9 @@ public class ConverterServiceImpl implements ConverterService {
     }
 
     @Override
-    public Optional<BigDecimal> convert(String username, String currency, BigDecimal amount) {
+    public Optional<ExchangedInfo> convert(String username, String currency, BigDecimal amount) {
 
-        return getConvertCurrency(currency, amount);
+        return getConvertCurrency(currency.toUpperCase(), amount);
     }
 
 

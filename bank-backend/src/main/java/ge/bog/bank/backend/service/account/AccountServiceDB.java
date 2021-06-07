@@ -8,9 +8,11 @@ import ge.bog.bank.backend.exception.InvalidUserException;
 import ge.bog.bank.backend.exception.UserNotFoundException;
 import ge.bog.bank.backend.repository.AccountRepository;
 import ge.bog.bank.backend.repository.UserRepository;
+import ge.bog.bank.backend.service.converter.CurrencyValidator;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.Optional;
 import java.util.Set;
 
@@ -27,14 +29,20 @@ public class AccountServiceDB implements AccountService {
     @Override
     public Set<AccountEntity> getUserAccounts(@NotNull String username) {
         Optional<UserEntity> user = userRepository.findByUsername(username);
-        if (user.isPresent()) {
-            return user.get()
-                    .getAccountSet();
-//            return user.get()
-//                    .getAccountSet().stream()
-//                    .map(AccountDto::EntityToDto)
-//                    .collect(Collectors.toList());
+        try {
+            if (user.isPresent()) {
+                return user.get()
+                        .getAccountSet();
+    //            return user.get()
+    //                    .getAccountSet().stream()
+    //                    .map(AccountDto::EntityToDto)
+    //                    .collect(Collectors.toList());
+            }
+
+        }catch (Exception e){
+            System.out.println(e.getMessage());
         }
+
         throw new UserNotFoundException(username);
     }
 
@@ -45,6 +53,10 @@ public class AccountServiceDB implements AccountService {
         if (userEntityOptional.isPresent()) {
             UserEntity user = userEntityOptional.get();
             AccountEntity acc = new AccountEntity(currency, user);
+            // TODO is this needed ?
+//            user.addAccount(acc);
+//            userRepository.save(user);
+
             accountRepository.save(acc);
             return acc;
         }

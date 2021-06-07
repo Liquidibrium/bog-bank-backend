@@ -86,6 +86,7 @@ public class UserEntity implements Serializable {
         this.email = userDto.getEmail();
     }
 
+    // TODO add account to user entity too
     public void addAccount(AccountEntity accountEntity) {
         accountSet.add(accountEntity);
     }
