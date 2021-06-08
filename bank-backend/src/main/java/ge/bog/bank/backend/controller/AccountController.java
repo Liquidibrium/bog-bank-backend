@@ -1,9 +1,9 @@
 package ge.bog.bank.backend.controller;
 
-import ge.bog.bank.backend.entitiy.AccountEntity;
 import ge.bog.bank.backend.exception.AccountNotFoundException;
 import ge.bog.bank.backend.exception.InvalidUserException;
 import ge.bog.bank.backend.exception.UserNotFoundException;
+import ge.bog.bank.backend.model.AccountDto;
 import ge.bog.bank.backend.service.account.AccountService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,9 +23,9 @@ public class AccountController {
     }
 
     @GetMapping("{username}/account/")
-    public ResponseEntity<Set<AccountEntity>> getAllAccountForUser(@PathVariable String username) {
+    public ResponseEntity<Set<AccountDto>> getAllAccountForUser(@PathVariable String username) {
         try {
-            Set<AccountEntity> accounts = accountService.getUserAccounts(username);
+            Set<AccountDto> accounts = accountService.getUserAccounts(username);
             return new ResponseEntity<>(accounts, HttpStatus.OK);
         } catch (UserNotFoundException e) {
             log.warn("user: %s NOT FOUND".formatted(username));
@@ -34,10 +34,10 @@ public class AccountController {
     }
 
     @GetMapping("{username}/account/{accId}")
-    public ResponseEntity<AccountEntity> getAccount(@PathVariable String username,
-                                                    @PathVariable Long accId) {
+    public ResponseEntity<AccountDto> getAccount(@PathVariable String username,
+                                                 @PathVariable Long accId) {
         try {
-            AccountEntity accounts = accountService.getAccount(username, accId);
+            AccountDto accounts = accountService.getAccount(username, accId);
             return new ResponseEntity<>(accounts, HttpStatus.OK);
         } catch (AccountNotFoundException e) {
             log.warn("account not found by Id: %s".formatted(accId.toString()));
@@ -49,10 +49,10 @@ public class AccountController {
     }
 
     @PostMapping("{username}/account/")
-    public ResponseEntity<AccountEntity> AddAccountForUser(@PathVariable String username,
-                                                           @RequestParam String currency) {
+    public ResponseEntity<AccountDto> AddAccountForUser(@PathVariable String username,
+                                                        @RequestParam String currency) {
         try {
-            AccountEntity accounts = accountService.addAccount(username, currency);
+            AccountDto accounts = accountService.addAccount(username, currency);
             return new ResponseEntity<>(accounts, HttpStatus.OK);
         } catch (UserNotFoundException e) {
             log.warn("user: %s NOT FOUND".formatted(username));

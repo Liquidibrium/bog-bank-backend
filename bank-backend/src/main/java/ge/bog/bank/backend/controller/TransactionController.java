@@ -1,8 +1,6 @@
 package ge.bog.bank.backend.controller;
 
-import ge.bog.bank.backend.entitiy.TransactionEntity;
 import ge.bog.bank.backend.exception.InvalidBankTransactionException;
-import ge.bog.bank.backend.exception.InvalidUserException;
 import ge.bog.bank.backend.exception.NotEnoughMoneyException;
 import ge.bog.bank.backend.exception.UserNotFoundException;
 import ge.bog.bank.backend.model.TransferDto;
@@ -27,11 +25,11 @@ public class TransactionController {
 
 
     @PostMapping()
-    private ResponseEntity<TransactionEntity> makeTransaction(@RequestBody TransferDto transferDto) {
+    private ResponseEntity<TransferDto> makeTransaction(@RequestBody TransferDto transferDto) {
         try {
-            TransactionEntity transactionEntity = transactionService.transferMoney(transferDto);
+            TransferDto transaction = transactionService.transferMoney(transferDto);
             log.info("successfully transferred money ");
-            return new ResponseEntity<>(transactionEntity, HttpStatus.OK);
+            return new ResponseEntity<>(transaction, HttpStatus.OK);
         } catch (UserNotFoundException | NotEnoughMoneyException e) {
             log.warn(e.getMessage());
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -45,11 +43,11 @@ public class TransactionController {
     }
 
     @PostMapping("/acc/{accountId}/")
-    private ResponseEntity<TransactionEntity> addMoneyToAccount(@PathVariable Long accountId, @RequestParam BigDecimal amount) {
+    private ResponseEntity<TransferDto> addMoneyToAccount(@PathVariable Long accountId, @RequestParam BigDecimal amount) {
         try {
-            TransactionEntity transactionEntity = transactionService.addMoneyToAccount(accountId, amount);
+            TransferDto transaction = transactionService.addMoneyToAccount(accountId, amount);
             log.info("successfully transferred money ");
-            return new ResponseEntity<>(transactionEntity, HttpStatus.OK);
+            return new ResponseEntity<>(transaction, HttpStatus.OK);
         } catch (UserNotFoundException e) {
             log.warn(e.getMessage());
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);

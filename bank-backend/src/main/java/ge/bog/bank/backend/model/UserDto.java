@@ -15,18 +15,16 @@ public class UserDto implements Serializable {
     private String username;
     private String firstName;
     private String lastName;
-//    @JsonIgnore
     private String password;
     private String email;
-//    @JsonIgnore
-//    private Set<AccountEntity> accountList;
+
 
     public static UserDto entityToDto(UserEntity userEntity) {
         return UserDto.builder()
                 .username(userEntity.getUsername())
                 .firstName(userEntity.getFirstName())
                 .lastName(userEntity.getLastName())
-                .password(userEntity.getPassword()) // TODO change to hash
+                .password(userEntity.getPassword())
                 .email(userEntity.getEmail())
                 .build();
     }

@@ -1,9 +1,10 @@
 package ge.bog.bank.backend.entitiy;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import ge.bog.bank.backend.model.AccountDto;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -44,11 +45,9 @@ public class AccountEntity implements Serializable {
     private UserEntity user; // TODO change FK name
 
     @OneToMany(mappedBy = "toAcc")
-    @JsonIgnore
     private Set<TransactionEntity> transactionSetTo = new HashSet<>();
 
     @OneToMany(mappedBy = "fromAcc")
-    @JsonIgnore
     private Set<TransactionEntity> transactionSetFrom = new HashSet<>();
 
     public AccountEntity(String currency, UserEntity user) {
@@ -56,17 +55,13 @@ public class AccountEntity implements Serializable {
         this.user = user;
     }
 
-    public AccountEntity(AccountDto accountDto) {
-        this.currency = accountDto.getCurrency();
-        this.user = accountDto.getUser();
-    }
 
     public AccountEntity(String currency, UserEntity user, BigDecimal balance) {
         this.currency = currency;
         this.user = user;
         this.balance = balance;
     }
-    // TODO add transactions to users too
+
     public void addTransactionTo(TransactionEntity transactionEntity) {
         transactionSetTo.add(transactionEntity);
     }

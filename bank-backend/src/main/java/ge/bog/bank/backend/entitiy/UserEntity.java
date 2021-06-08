@@ -1,6 +1,5 @@
 package ge.bog.bank.backend.entitiy;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import ge.bog.bank.backend.model.UserDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -55,7 +53,6 @@ public class UserEntity implements Serializable {
     @Column(name = "password",
             nullable = false
     )
-    @JsonIgnore
     private String password;
 
     @Column(name = "email",
@@ -64,9 +61,7 @@ public class UserEntity implements Serializable {
     private String email;
 
     @OneToMany(mappedBy = "user", orphanRemoval = true)
-//    @RestResource(path = "libraryAddress", rel = "address")
-    // cascade
-    @JsonIgnore
+
     private Set<AccountEntity> accountSet = new HashSet<>();
 
 
@@ -86,7 +81,6 @@ public class UserEntity implements Serializable {
         this.email = userDto.getEmail();
     }
 
-    // TODO add account to user entity too
     public void addAccount(AccountEntity accountEntity) {
         accountSet.add(accountEntity);
     }

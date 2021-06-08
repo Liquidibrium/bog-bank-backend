@@ -28,7 +28,7 @@ public class TransactionServiceDB implements TransactionService {
 
     @Override
     @Transactional
-    public TransactionEntity transferMoney(Long accIDFrom, Long accIDTo, BigDecimal amount) {
+    public TransferDto transferMoney(Long accIDFrom, Long accIDTo, BigDecimal amount) {
         boolean valid = // validate if usernameFrom is valid
                 TransactionValidator.validateTransaction(accIDFrom, accIDTo, amount);
         if (valid) {
@@ -48,7 +48,7 @@ public class TransactionServiceDB implements TransactionService {
 //                        accountRepository.save(accFrom);
 //                        accountRepository.save(accTo);
                         transactionRepository.save(transaction);
-                        return transaction;
+                        return TransferDto.toDto(transaction);
                     }
                     throw new AccountNotFoundException(accIDTo);
                 }
@@ -60,14 +60,14 @@ public class TransactionServiceDB implements TransactionService {
     }
 
     @Override
-    public TransactionEntity transferMoney(TransferDto transferDto) {
+    public TransferDto transferMoney(TransferDto transferDto) {
         return transferMoney(transferDto.getAccIDFrom(),
                 transferDto.getAccIDTo(),
                 transferDto.getAmount());
     }
 
     @Override
-    public TransactionEntity addMoneyToAccount(Long accIDTo, BigDecimal amount) {
+    public TransferDto addMoneyToAccount(Long accIDTo, BigDecimal amount) {
         boolean valid = // validate if usernameFrom is valid
                 TransactionValidator.validateTransaction(accIDTo, accIDTo, amount);
         if (valid) {
@@ -77,7 +77,7 @@ public class TransactionServiceDB implements TransactionService {
                 accTo.setBalance(accTo.getBalance().add(amount));
                 TransactionEntity transaction = new TransactionEntity(accTo, accTo, amount); // this may be error-prone
                 transactionRepository.save(transaction);
-                return transaction;
+                return TransferDto.toDto(transaction);
             }
             throw new AccountNotFoundException(accIDTo);
         }
