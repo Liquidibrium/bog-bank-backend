@@ -1,0 +1,105 @@
+{
+	"info": {
+		"_postman_id": "881d7bf8-8a09-4be6-9f1e-2cfb5b78a1a7",
+		"name": "converter app",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "convert",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8881/api/convert/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8881",
+					"path": [
+						"api",
+						"convert",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "convert without param",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8881/api/convert/eur",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8881",
+					"path": [
+						"api",
+						"convert",
+						"eur"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "convert amount",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8881/api/convert/usd?amount=1000",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8881",
+					"path": [
+						"api",
+						"convert",
+						"usd"
+					],
+					"query": [
+						{
+							"key": "amount",
+							"value": "1000"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "currcency not found",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8881/api/convert/asd?amount=1000",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8881",
+					"path": [
+						"api",
+						"convert",
+						"asd"
+					],
+					"query": [
+						{
+							"key": "amount",
+							"value": "1000"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
