@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+
 @RestController
 @RequestMapping("/api/transaction")
 @Slf4j
@@ -42,4 +44,21 @@ public class TransactionController {
         }
     }
 
+    @PostMapping("/acc/{accountId}/")
+    private ResponseEntity<TransactionEntity> addMoneyToAccount(@PathVariable Long accountId, @RequestParam BigDecimal amount) {
+        try {
+            TransactionEntity transactionEntity = transactionService.addMoneyToAccount(accountId, amount);
+            log.info("successfully transferred money ");
+            return new ResponseEntity<>(transactionEntity, HttpStatus.OK);
+        } catch (UserNotFoundException e) {
+            log.warn(e.getMessage());
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        } catch (InvalidBankTransactionException e) {
+            log.warn(e.getMessage());
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            log.error("failed to make transaction ");
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+    }
 }

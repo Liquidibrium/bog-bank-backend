@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static ge.bog.bank.backend.model.currency.CurrencyISO.GEL;
+
 @Service
 @Slf4j
 public class UserServiceDB implements UserService {
@@ -59,11 +61,10 @@ public class UserServiceDB implements UserService {
         UserEntity entity = new UserEntity(newUser);
         try {
             UserEntity user = userRepository.save(entity);
-            accountRepository.save(new AccountEntity("GEl", user, BigDecimal.TEN));// ten GEL Gift!!
+            accountRepository.save(new AccountEntity(GEL, user, BigDecimal.TEN));// ten GEL Gift!!
             return UserDto.entityToDto(user);
 
         } catch (Exception e) {
-            log.warn("could not create user ");
             throw new UserAlreadyExistsException(newUser.getUsername());
         }
     }
@@ -79,7 +80,7 @@ public class UserServiceDB implements UserService {
         } else {
             userEntity = new UserEntity(userDto);
             userEntity = userRepository.save(userEntity);
-            accountRepository.save(new AccountEntity("GEl", userEntity));
+            accountRepository.save(new AccountEntity(GEL, userEntity));
         }
         return UserDto.entityToDto(userEntity);
     }
@@ -95,7 +96,6 @@ public class UserServiceDB implements UserService {
         } catch (RuntimeException e) {
             e.printStackTrace();
         }
-        log.warn("could not delete user : %s".formatted(username));
         throw new UserNotFoundException(username);
     }
 }

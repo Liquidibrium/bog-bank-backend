@@ -83,20 +83,20 @@ public class UserController {
             log.info("updated user: %s".formatted(user.getUsername()));
             return new ResponseEntity<>(userDto, HttpStatus.OK);
         } catch (Exception e) {
-            log.warn("could not update user");
+            log.warn("could not update user: %s".formatted(user.getUsername()));
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
     }
 
     @NotNull
-    static ResponseEntity<UserDto> getUserDtoResponseEntity(@RequestBody UserDto newUser,
-                                                            UserService userService) {
+    protected static ResponseEntity<UserDto> getUserDtoResponseEntity(@RequestBody UserDto newUser,
+                                                                      UserService userService) {
         try {
             UserDto createdUserDto = userService.createUser(newUser);
             log.info("created new user: %s".formatted(newUser.getUsername()));
             return new ResponseEntity<>(createdUserDto, HttpStatus.CREATED);
         } catch (Exception e) {
-            log.warn("could not create new user");
+            log.warn("could not create new user %s".formatted(newUser.getUsername()));
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }

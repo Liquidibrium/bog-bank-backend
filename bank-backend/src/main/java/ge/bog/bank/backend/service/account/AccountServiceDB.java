@@ -12,7 +12,6 @@ import ge.bog.bank.backend.service.converter.CurrencyValidator;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
-import java.security.Principal;
 import java.util.Optional;
 import java.util.Set;
 
@@ -33,13 +32,13 @@ public class AccountServiceDB implements AccountService {
             if (user.isPresent()) {
                 return user.get()
                         .getAccountSet();
-    //            return user.get()
-    //                    .getAccountSet().stream()
-    //                    .map(AccountDto::EntityToDto)
-    //                    .collect(Collectors.toList());
+                //            return user.get()
+                //                    .getAccountSet().stream()
+                //                    .map(AccountDto::EntityToDto)
+                //                    .collect(Collectors.toList());
             }
 
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
 
@@ -53,9 +52,9 @@ public class AccountServiceDB implements AccountService {
         if (userEntityOptional.isPresent()) {
             UserEntity user = userEntityOptional.get();
             AccountEntity acc = new AccountEntity(currency, user);
-            // TODO is this needed ?
-//            user.addAccount(acc);
-//            userRepository.save(user);
+            // TODO does this needed ?
+            // user.addAccount(acc);
+            // userRepository.save(user);
 
             accountRepository.save(acc);
             return acc;

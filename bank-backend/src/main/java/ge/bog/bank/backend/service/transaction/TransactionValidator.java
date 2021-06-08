@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 public class TransactionValidator {
 
     public static Boolean validateTransaction(Long usernameFrom, Long usernameTo, BigDecimal amount) {
-        return true;
+        return amount.compareTo(BigDecimal.ZERO) > 0;
     }
 
 }

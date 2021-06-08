@@ -42,7 +42,7 @@ public class TransactionServiceDB implements TransactionService {
                         accFrom.setBalance(accFrom.getBalance().subtract(amount));
                         accTo.setBalance(accTo.getBalance().add(amount));
                         TransactionEntity transaction = new TransactionEntity(accFrom, accTo, amount);
-                        // is this needed ?? TODO
+                        // does this needed ?? TODO
 //                        accFrom.addTransactionFrom(transaction);
 //                        accTo.addTransactionTo(transaction);
 //                        accountRepository.save(accFrom);
@@ -65,4 +65,23 @@ public class TransactionServiceDB implements TransactionService {
                 transferDto.getAccIDTo(),
                 transferDto.getAmount());
     }
+
+    @Override
+    public TransactionEntity addMoneyToAccount(Long accIDTo, BigDecimal amount) {
+        boolean valid = // validate if usernameFrom is valid
+                TransactionValidator.validateTransaction(accIDTo, accIDTo, amount);
+        if (valid) {
+            Optional<AccountEntity> optionalAccountTo = accountRepository.findById(accIDTo);
+            if (optionalAccountTo.isPresent()) {
+                AccountEntity accTo = optionalAccountTo.get();
+                accTo.setBalance(accTo.getBalance().add(amount));
+                TransactionEntity transaction = new TransactionEntity(accTo, accTo, amount); // this may be error-prone
+                transactionRepository.save(transaction);
+                return transaction;
+            }
+            throw new AccountNotFoundException(accIDTo);
+        }
+        throw new InvalidBankTransactionException(accIDTo, accIDTo, amount);
+    }
+
 }
