@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.util.Optional;
 
+import static ge.bog.bank.backend.model.currency.CurrencyISO.GEL;
+
 @RestController
 @RequestMapping("/api/convert/")
 @Slf4j
@@ -29,11 +31,11 @@ public class ConverterController {
 
         Optional<ExchangedInfo> convert = converterService.convert(username, currency, amount);
         return convert.map(exc -> {
-            log.info("USER:%s converted %s %s from GEL".formatted(username, currency, amount.toString()));
+            log.info("USER:%s converted %s %s to %s".formatted(username, currency, amount.toString(), GEL));
             return new ResponseEntity<>(exc, HttpStatus.OK);
         })
                 .orElseGet(() -> {
-                    log.info("could not convert %s %s from GEL for USER:%s".formatted(currency, amount.toString(), username));
+                    log.info("could not convert %s %s to %s for USER:%s".formatted(currency, amount.toString(), GEL, username));
                     return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
                 });
     }

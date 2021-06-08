@@ -16,8 +16,8 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class WebConfig {
     private static final int TIME_TO_WAIT_IN_MILLISECONDS = 5000;
-    @Value("${my.currency.converter.url}")
-    private static String converterUrl;
+//    @Value("${my.currency.converter.url}")
+    private static final String CONVERTER_URL = "http://localhost:8881/api/convert/";
 
     @Bean
     public static WebClient getWebClient() {
@@ -30,7 +30,7 @@ public class WebConfig {
 
         return WebClient.builder()
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
-                .baseUrl("http://localhost:8881/api/convert/")
+                .baseUrl(CONVERTER_URL)
                 .build();
     }
 }

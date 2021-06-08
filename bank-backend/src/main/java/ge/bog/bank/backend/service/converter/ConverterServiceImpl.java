@@ -12,6 +12,8 @@ import java.util.Optional;
 @Service
 public class ConverterServiceImpl implements ConverterService {
 
+    // TODO  add converted money to user's account
+
 
     private final WebClient client;
     private static final String converterAPIFormat = "%s?amount=%s";
@@ -43,7 +45,7 @@ public class ConverterServiceImpl implements ConverterService {
 
     @Override
     public Optional<ExchangedInfo> convert(String username, String currency, BigDecimal amount) {
-
+        // TODO validate user
         return getConvertCurrency(currency.toUpperCase(), amount);
     }
 
