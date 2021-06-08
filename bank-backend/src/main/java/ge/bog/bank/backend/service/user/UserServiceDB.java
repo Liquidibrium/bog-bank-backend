@@ -7,7 +7,6 @@ import ge.bog.bank.backend.exception.UserNotFoundException;
 import ge.bog.bank.backend.model.UserDto;
 import ge.bog.bank.backend.repository.AccountRepository;
 import ge.bog.bank.backend.repository.UserRepository;
-import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +18,6 @@ import java.util.stream.Collectors;
 import static ge.bog.bank.backend.model.currency.CurrencyISO.GEL;
 
 @Service
-@Slf4j
 public class UserServiceDB implements UserService {
 
     private final UserRepository userRepository;

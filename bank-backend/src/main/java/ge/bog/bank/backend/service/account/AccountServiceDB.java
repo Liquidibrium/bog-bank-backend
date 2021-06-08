@@ -55,7 +55,6 @@ public class AccountServiceDB implements AccountService {
             // TODO does this needed?
             // user.addAccount(acc);
             // userRepository.save(user);
-
             accountRepository.save(acc);
             return AccountDto.EntityToDto(acc);
         }

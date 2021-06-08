@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-import static ge.bog.bank.backend.model.currency.CurrencyISO.GEL;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,11 +18,4 @@ public class CurrencyInfo implements Serializable {
     private Long quantity;
     private BigDecimal val;
 
-    public CurrencyInfo(String currencyFrom, String description, Long quantity, BigDecimal val) {
-        this.currencyFrom = currencyFrom;
-        this.description = description;
-        this.quantity = quantity;
-        this.val = val;
-        this.currencyTO = GEL;
-    }
 }
