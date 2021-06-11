@@ -95,15 +95,10 @@ public class UserServiceDB implements UserService {
 
     @Override
     public UserDto deleteUserByUsername(@NotNull String username) {
-        try {
-            Optional<UserEntity> userEntity = userRepository.findByUsername(username);
-            if (userEntity.isPresent()) {
-                userRepository.delete(userEntity.get());
-                return UserDto.entityToDto(userEntity.get());
-            }
-        } catch (RuntimeException e) {
-            //            e.printStackTrace();
-            // todo
+        Optional<UserEntity> userEntity = userRepository.findByUsername(username);
+        if (userEntity.isPresent()) {
+            userRepository.delete(userEntity.get());
+            return UserDto.entityToDto(userEntity.get());
         }
         throw new UserNotFoundException(username);
     }

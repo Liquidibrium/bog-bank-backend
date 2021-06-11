@@ -46,7 +46,7 @@ public class TransactionController {
     private ResponseEntity<TransferDto> addMoneyToAccount(@PathVariable Long accountId, @RequestParam BigDecimal amount) {
         try {
             TransferDto transaction = transactionService.addMoneyToAccount(accountId, amount);
-            log.info("successfully transferred money ");
+            log.info("successfully add money to %s ".formatted(accountId));
             return new ResponseEntity<>(transaction, HttpStatus.OK);
         } catch (UserNotFoundException e) {
             log.warn(e.getMessage());
@@ -55,7 +55,7 @@ public class TransactionController {
             log.warn(e.getMessage());
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
-            log.error("failed to make transaction ");
+            log.error("failed to add money(%s) to %s transaction ".formatted(amount, accountId));
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }

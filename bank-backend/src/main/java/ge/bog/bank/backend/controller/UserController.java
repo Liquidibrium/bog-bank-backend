@@ -56,6 +56,9 @@ public class UserController {
         } catch (UserNotFoundException e) {
             log.warn("user not found by username: %s".formatted(username));
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            log.error("DELETE user %s | error %s".formatted(username, e.getMessage()));
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -68,6 +71,9 @@ public class UserController {
         } catch (UserNotFoundException e) {
             log.warn("not found user by ID: %d".formatted(id));
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            log.error("GET user by %s | error %s".formatted(id, e.getMessage()));
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

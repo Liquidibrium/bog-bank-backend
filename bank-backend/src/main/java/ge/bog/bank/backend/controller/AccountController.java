@@ -30,6 +30,9 @@ public class AccountController {
         } catch (UserNotFoundException e) {
             log.warn("user: %s NOT FOUND".formatted(username));
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            log.error("GET accounts by %s | error %s".formatted(username, e.getMessage()));
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -45,6 +48,9 @@ public class AccountController {
         } catch (InvalidUserException e) {
             log.warn("invalid user: %s".formatted(username));
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            log.error("GET account %s by %s | error %s".formatted(accId, username, e.getMessage()));
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -57,6 +63,9 @@ public class AccountController {
         } catch (UserNotFoundException e) {
             log.warn("user: %s NOT FOUND".formatted(username));
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            log.error("POST account by %s | error %s".formatted(username, e.getMessage()));
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
