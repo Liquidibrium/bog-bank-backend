@@ -29,7 +29,7 @@ public class TransactionEntity implements Serializable {
             generator = "transaction_seq"
     )
     @Column(name = "transaction_id",
-            updatable = false)
+            updatable = false, nullable = false)
     private Long transactionId;
 
 

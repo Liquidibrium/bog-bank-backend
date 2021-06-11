@@ -32,13 +32,13 @@ public class AccountEntity implements Serializable {
             generator = "account_seq"
     )
     @Column(name = "account_id",
-            updatable = false)
+            updatable = false, nullable = false)
     private Long accountId;
 
-    @Column(name = "currency")
+    @Column(name = "currency", nullable = false)
     private String currency;
 
-    @Column(name = "balance")
+    @Column(name = "balance", nullable = false)
     private BigDecimal balance = BigDecimal.ZERO;
 
     @ManyToOne
