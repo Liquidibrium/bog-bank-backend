@@ -11,7 +11,7 @@ or in Postman's json files
     with amount  -  http://localhost:8881/api/convert/{currency}?amount={int}
     without amount -  http://localhost:8881/api/convert/{currency}
 
-## Database Table Relation
+## Database Table Relationships
 
 !["database design"](bank-backend/DB.png)
 
