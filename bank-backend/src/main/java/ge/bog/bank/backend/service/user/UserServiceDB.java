@@ -1,7 +1,10 @@
 package ge.bog.bank.backend.service.user;
 
+import ge.bog.bank.backend.email.EmailSender;
+import ge.bog.bank.backend.email.EmailValidator;
 import ge.bog.bank.backend.entitiy.AccountEntity;
 import ge.bog.bank.backend.entitiy.UserEntity;
+import ge.bog.bank.backend.exception.InvalidMailException;
 import ge.bog.bank.backend.exception.UserAlreadyExistsException;
 import ge.bog.bank.backend.exception.UserNotFoundException;
 import ge.bog.bank.backend.model.UserDto;
@@ -22,10 +25,12 @@ public class UserServiceDB implements UserService {
 
     private final UserRepository userRepository;
     private final AccountRepository accountRepository;
+    private final EmailSender mailer;
 
-    public UserServiceDB(UserRepository userRepository, AccountRepository accountRepository) {
+    public UserServiceDB(UserRepository userRepository, AccountRepository accountRepository, EmailSender emailer) {
         this.userRepository = userRepository;
         this.accountRepository = accountRepository;
+        this.mailer = emailer;
     }
 
     @Override
@@ -55,13 +60,18 @@ public class UserServiceDB implements UserService {
     }
 
     @Override
-    public UserDto createUser(@NotNull UserDto newUser) {
+    public UserDto createUser(@NotNull UserDto newUser) throws InvalidMailException, UserAlreadyExistsException {
         UserEntity entity = new UserEntity(newUser);
+        String mail = newUser.getEmail();
+        String userName = newUser.getUsername();
         try {
+            EmailValidator.validate(mail);
+            mailer.sendWelcomeMail(mail, userName);
             UserEntity user = userRepository.save(entity);
             accountRepository.save(new AccountEntity(GEL, user, BigDecimal.TEN));// ten GEL Gift!!
             return UserDto.entityToDto(user);
-
+        } catch (InvalidMailException | IllegalStateException e) {
+            throw new InvalidMailException(mail);
         } catch (Exception e) {
             throw new UserAlreadyExistsException(newUser.getUsername());
         }
@@ -92,7 +102,8 @@ public class UserServiceDB implements UserService {
                 return UserDto.entityToDto(userEntity.get());
             }
         } catch (RuntimeException e) {
-            e.printStackTrace();
+            //            e.printStackTrace();
+            // todo
         }
         throw new UserNotFoundException(username);
     }

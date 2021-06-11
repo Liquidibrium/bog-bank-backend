@@ -1,5 +1,6 @@
 package ge.bog.bank.backend.controller;
 
+import ge.bog.bank.backend.exception.InvalidMailException;
 import ge.bog.bank.backend.exception.UserNotFoundException;
 import ge.bog.bank.backend.model.UserDto;
 import ge.bog.bank.backend.service.user.UserService;
@@ -95,6 +96,9 @@ public class UserController {
             UserDto createdUserDto = userService.createUser(newUser);
             log.info("created new user: %s".formatted(newUser.getUsername()));
             return new ResponseEntity<>(createdUserDto, HttpStatus.CREATED);
+        } catch (InvalidMailException e) {
+            log.warn("invalid email(%s) for user%s".formatted(newUser.getEmail(), newUser.getUsername()));
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             log.warn("could not create new user %s".formatted(newUser.getUsername()));
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
