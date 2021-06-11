@@ -20,7 +20,7 @@ import java.util.*;
 public class NbgRssParser implements RssParser {
 
     private static final String NATIONAL_BANK_GEORGIA_URL = "http://www.nbg.ge/rss.php";
-    private static final long REFRESH_TIME = 1L; // refresh currency info in minute
+    private static final long REFRESH_TIME = 1L; // refresh currency info in one minute
     private final Map<String, CurrencyInfo> info;
     private LocalDateTime time;
 
@@ -58,6 +58,7 @@ public class NbgRssParser implements RssParser {
             URL feedSource = new URL(NATIONAL_BANK_GEORGIA_URL);
             SyndFeedInput input = new SyndFeedInput();
             SyndFeed feed = input.build(new XmlReader(feedSource));
+            // get description tag list
             String currencies = ((SyndEntryImpl) (feed.getEntries().get(0)))
                     .getDescription().getValue();
             String stringWithOutImageTags = RemoveImageTags(currencies);
@@ -109,6 +110,7 @@ public class NbgRssParser implements RssParser {
     private void getInfo(String descriptionText) {
         List<String> list = getCurrencyList(descriptionText);
 
+        // from filtered currency string obtains CurrencyInfo class
         for (int i = 0; i < list.size(); i += NUMBER_OF_XML_TAGS_NEEDED) {
             int index = list.get(i + 1).strip().indexOf(" ");
             String currencyFrom = list.get(i);

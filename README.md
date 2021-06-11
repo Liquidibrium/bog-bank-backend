@@ -3,6 +3,7 @@
 Bank Transactions, final Project for Bank of Georgia, 'Java Back-End Course'
 
 Detailded API for bank can be seen with Swagger at <http://localhost:8880/swagger-ui/index.html>
+or in Postman's json files
 
 ## converter-apps API calls
 
