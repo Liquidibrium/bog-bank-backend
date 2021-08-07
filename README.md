@@ -15,4 +15,3 @@ or in Postman's json files
 
 !["database design"](bank-backend/DB.png)
 
-© Vano Ganjelashvili
